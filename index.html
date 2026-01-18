@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CNY 2026 Lucky Draw</title>
+<style>
+  body{margin:0;height:100vh;background:linear-gradient(135deg,#c8102e,#b22222,#ffcc00);color:#fff;font-family:Arial,sans-serif;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+  h1{font-size:3.2rem;margin:0 0 1.5rem;text-shadow:0 0 15px #fff8;}
+  #display{font-size:7rem;font-weight:bold;min-height:160px;text-shadow:0 0 30px #000c,0 0 60px #ff0;opacity:0.95;}
+  button{padding:1.2rem 4rem;font-size:2rem;background:#fff;color:#c8102e;border:none;border-radius:60px;cursor:pointer;box-shadow:0 10px 30px #0006;transition:all .2s;margin:0.5rem;}
+  button:hover{transform:scale(1.1);background:#ffcc00;}
+  button:disabled{opacity:0.5;cursor:not-allowed;}
+  #prize{font-size:3.5rem;margin-top:1.5rem;color:#ff0;text-shadow:0 0 25px #f90;opacity:0;}
+  #controls{margin-top:1rem;}
+  input[type=range]{width:180px;}
+</style>
+</head>
+<body>
+
+<h1>Chinese New Year 2026 Lucky Draw</h1>
+<div id="display"></div>
+<button id="btn">Draw Winner!</button>
+<div id="prize"></div>
+
+<div id="controls">
+  <label>Music Volume: <input type="range" id="vol" min="0" max="1" step="0.01" value="0.25"></label>
+</div>
+
+<audio id="bgm" loop preload="auto">
+  <source src="https://cdn.pixabay.com/download/audio/2023/08/07/audio_3d3e8c8e0a.mp3?filename=chinese-lunar-new-year-465871.mp3" type="audio/mpeg">
+</audio>
+<audio id="tick" src="https://assets.codepen.io/605876/tick.mp3" preload="auto"></audio>
+<audio id="win" src="https://assets.codepen.io/605876/win.mp3" preload="auto"></audio>
+
+<script>
+const names = ["Edwin","Patrick","Weien","Deven","Vivien","Paul","Katherine","phliyis","Batu","Joyce","Kenneth","alexis","HuiMing","Karen","Jack","JunWei","Sharon","Tengren","Nick","Etham","Joanna","Muhit","Will","Andrew","Andy","Sem","Clarince","Serene","Lenny","Josephe","Gracy","Pauline","Jianguan","Cally","Sheng","Jinrong","Yuezi","Leeching","Roshida","Ed","Ronney","Dophine","Jace","Sing Rui","Leo","Anil"];
+
+const bgm  = document.getElementById('bgm');
+const tick = document.getElementById('tick');
+const win  = document.getElementById('win');
+const vol  = document.getElementById('vol');
+const display = document.getElementById('display');
+const btn = document.getElementById('btn');
+const prize = document.getElementById('prize');
+
+bgm.volume = 0.25;
+
+vol.oninput = () => { bgm.volume = vol.value; };
+
+function flash() {
+  display.textContent = names[Math.floor(Math.random()*names.length)];
+  tick.currentTime = 0;
+  tick.play().catch(()=>{});
+}
+
+function startDraw() {
+  bgm.play().catch(()=>{});
+  btn.disabled = true;
+  prize.style.opacity = '0';
+  prize.textContent = '';
+
+  let count = 0;
+  const interval = setInterval(() => {
+    flash();
+    count++;
+    if (count > 60) clearInterval(interval);
+  }, 70);
+
+  setTimeout(() => {
+    clearInterval(interval);
+    const winner = names[Math.floor(Math.random()*names.length)];
+    display.textContent = winner;
+    prize.textContent = "Congratulations! 🎉 Grand Prize Winner!";
+    prize.style.opacity = '1';
+    win.currentTime = 0;
+    win.play().catch(()=>{});
+    btn.disabled = false;
+  }, 4500);
+}
+
+btn.onclick = startDraw;
+
+setInterval(flash, 1800);
+flash();
+</script>
+</body>
+</html>
